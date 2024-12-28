@@ -18,6 +18,9 @@ defmodule TodoListWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    resources "/tasks", TaskController, except: [:edit, :update] do
+      put "mark_complete", TaskController, :mark_complete
+    end
   end
 
   # Other scopes may use custom stacks.

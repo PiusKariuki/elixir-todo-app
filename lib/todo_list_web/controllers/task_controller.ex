@@ -59,4 +59,20 @@ defmodule TodoListWeb.TaskController do
     |> put_flash(:info, "Task deleted successfully.")
     |> redirect(to: ~p"/tasks")
   end
+
+  def mark_complete(conn, %{"id" => id}) do
+    task = Tasks.get_task!(id)
+
+    case Tasks.update_task(task, %{completed: true}) do
+      {:ok, _task} ->
+        conn
+        |> put_flash(:info, "Task marked as complete.")
+        |> redirect(to: Routes.task_path(conn, :index))
+
+      {:error, _changeset} ->
+        conn
+        |> put_flash(:error, "Unable to mark task as complete.")
+        |>redirect(to: Routes.task_path(conn, :index))
+    end
+  end
 end
